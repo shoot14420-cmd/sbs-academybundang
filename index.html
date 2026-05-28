@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SBS아카데미컴퓨터아트학원 분당지점 - 시각편집, 웹디자인, 모션그래픽, 인테리어, CG, 디지털드로잉 학생 작품 포트폴리오 및 개강 안내">
+  <title>SBS아카데미컴퓨터아트학원 분당지점 | 학생 작품 포트폴리오</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <img src="https://miediapn.gensparkspace.com/images/sbs-logo.svg" alt="SBS아카데미 로고">
+    <span class="nav-logo-text">SBS아카데미<br>컴퓨터아트학원 분당지점</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#categories">작품</a></li>
+    <li><a href="notice.html">공지사항</a></li>
+    <li><a href="schedule.html">개강안내</a></li>
+    <li><a href="#about">소개</a></li>
+    <li><a href="#contact">문의</a></li>
+  </ul>
+  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="메뉴">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-label">SBS ACADEMY BUNDANG · STUDENT PORTFOLIO</span>
+  <h1>상상을 디자인하는<br><em>SBS아카데미</em> 분당지점</h1>
+  <p class="hero-desc">시각편집부터 모션그래픽, 인테리어까지<br>6개 분야 학생들의 창의적인 작품과 개강 일정을 만나보세요.</p>
+  <a href="#categories" class="btn-primary">작품 둘러보기 →</a>
+  <div class="hero-bg-text">SBS</div>
+</section>
+
+<!-- NOTICE TICKER -->
+<div class="notice-bar">
+  <div class="notice-bar-inner">
+    <div class="notice-label">공지</div>
+    <div class="notice-ticker">
+      <div class="notice-ticker-track" id="tickerTrack">
+        <a href="notice.html#ollpass">성남시 올패스 — 취업 지원금 &amp; 환급! SBS아카데미 수강 시 환급 가능</a>
+        <span class="notice-sep">·</span>
+        <a href="notice.html#license">국가자격증 시험일정 — 2026년 국가기술자격검정 시험 일정 안내</a>
+        <span class="notice-sep">·</span>
+        <a href="notice.html#acp">ACP 시험안내 — Adobe Certified Professional 시험 일정 및 신청 방법 안내</a>
+        <span class="notice-sep">·</span>
+        <a href="notice.html#mos">MOS 시험안내 — Microsoft Office Specialist 시험 일정 및 신청 방법 안내</a>
+        <span class="notice-sep">·</span>
+        <a href="notice.html#zoom">줌주소안내 — 온라인 수업 Zoom 링크 및 입장 방법 안내</a>
+        <span class="notice-sep">·</span>
+        <!-- 중복 (무한 스크롤용) -->
+        <a href="notice.html#ollpass">성남시 올패스 — 취업 지원금 &amp; 환급! SBS아카데미 수강 시 환급 가능</a>
+        <span class="notice-sep">·</span>
+        <a href="notice.html#license">국가자격증 시험일정 — 2026년 국가기술자격검정 시험 일정 안내</a>
+        <span class="notice-sep">·</span>
+        <a href="notice.html#acp">ACP 시험안내 — Adobe Certified Professional 시험 일정 및 신청 방법 안내</a>
+        <span class="notice-sep">·</span>
+        <a href="notice.html#mos">MOS 시험안내 — Microsoft Office Specialist 시험 일정 및 신청 방법 안내</a>
+        <span class="notice-sep">·</span>
+        <a href="notice.html#zoom">줌주소안내 — 온라인 수업 Zoom 링크 및 입장 방법 안내</a>
+        <span class="notice-sep">·</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="section" id="categories">
+  <span class="section-label">CATEGORIES</span>
+  <h2 class="section-title">학과를 선택하세요</h2>
+  <p class="section-sub">관심 있는 분야를 클릭하면 학생 작품을 바로 감상할 수 있어요.</p>
+
+  <div class="categories-grid">
+    <a href="visual-editing.html" class="cat-card">
+      <div class="cat-num">01</div>
+      <div class="cat-name">시각편집</div>
+      <div class="cat-en">Visual Editing</div>
+      <div class="cat-desc">사진과 영상을 활용한 시각 콘텐츠 편집 작품</div>
+      <div class="cat-arrow">→</div>
+    </a>
+    <a href="web-design.html" class="cat-card">
+      <div class="cat-num">02</div>
+      <div class="cat-name">웹디자인</div>
+      <div class="cat-en">Web Design</div>
+      <div class="cat-desc">사용자 경험을 고려한 웹사이트 디자인 작품</div>
+      <div class="cat-arrow">→</div>
+    </a>
+    <a href="motion-graphic.html" class="cat-card">
+      <span class="cat-badge">NEW</span>
+      <div class="cat-num">03</div>
+      <div class="cat-name">모션그래픽</div>
+      <div class="cat-en">Motion Graphic</div>
+      <div class="cat-desc">움직이는 영상으로 표현한 그래픽 작품</div>
+      <div class="cat-arrow">→</div>
+    </a>
+    <a href="interior.html" class="cat-card">
+      <div class="cat-num">04</div>
+      <div class="cat-name">인테리어</div>
+      <div class="cat-en">Interior Design</div>
+      <div class="cat-desc">공간을 디자인하는 인테리어 설계 작품</div>
+      <div class="cat-arrow">→</div>
+    </a>
+    <a href="cg.html" class="cat-card">
+      <div class="cat-num">05</div>
+      <div class="cat-name">CG</div>
+      <div class="cat-en">Computer Graphics</div>
+      <div class="cat-desc">3D 그래픽으로 구현한 컴퓨터 그래픽 작품</div>
+      <div class="cat-arrow">→</div>
+    </a>
+    <a href="digital-drawing.html" class="cat-card">
+      <div class="cat-num">06</div>
+      <div class="cat-name">디지털드로잉</div>
+      <div class="cat-en">Digital Drawing</div>
+      <div class="cat-desc">디지털 도구로 그려낸 일러스트레이션 작품</div>
+      <div class="cat-arrow">→</div>
+    </a>
+  </div>
+</section>
+
+<!-- SCHEDULE BANNER -->
+<div class="schedule-banner">
+  <div class="schedule-banner-left">
+    <div class="schedule-badge">NOTICE</div>
+    <div>
+      <div class="schedule-title">5월 개강 시간 안내표</div>
+      <div class="schedule-desc">분당지점 5월 개강반 시간표를 한눈에 확인하세요</div>
+    </div>
+  </div>
+  <a href="schedule.html" class="btn-outline-white">시간표 확인하기 →</a>
+</div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="about-grid">
+    <div>
+      <span class="section-label">ABOUT</span>
+      <h2 class="section-title">SBS아카데미컴퓨터아트학원<br>분당지점</h2>
+      <p class="section-sub">SBS아카데미컴퓨터아트학원 분당지점은 학생들의 창의성과 디자인 감각을 키우는 곳입니다. 시각편집, 웹디자인, 모션그래픽, 인테리어, CG, 디지털드로잉 등 다양한 분야의 실무 중심 교육을 통해 학생들이 자신만의 작품을 만들어갈 수 있도록 돕고 있습니다.</p>
+      <p style="margin-top:16px; font-size:14px; color:var(--gray-600);">분당지점 <strong>백지원 부장</strong></p>
+
+      <div class="about-stats">
+        <div class="stat-card">
+          <div class="stat-num">6</div>
+          <div class="stat-label">전문 분야</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">100+</div>
+          <div class="stat-label">학생 작품</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">창의적 가능성</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="contact">
+      <div class="about-contact">
+        <div class="about-contact-title">📞 문의하기</div>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div class="contact-label">전화번호</div>
+            <a href="tel:031-608-5593" class="contact-value">031-608-5593</a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <div class="contact-label">이메일</div>
+            <div class="contact-value">이메일로 문의</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">💬</div>
+          <div>
+            <div class="contact-label">카카오톡</div>
+            <div class="contact-value">someday0191</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">
+    <div>
+      <img src="https://miediapn.gensparkspace.com/images/sbs-logo.svg" alt="SBS아카데미">
+      <div class="footer-tagline">학생들의 무한한 창의력이 펼쳐지는 곳 · 분당지점 백지원 부장</div>
+    </div>
+  </div>
+  <div class="footer-copy">© 2026 SBS아카데미컴퓨터아트학원 분당지점. All rights reserved.</div>
+</footer>
+
+<script>
+function toggleMenu() {
+  const links = document.querySelector('.nav-links');
+  if (links.style.display === 'flex') {
+    links.style.display = '';
+  } else {
+    links.style.display = 'flex';
+    links.style.flexDirection = 'column';
+    links.style.position = 'fixed';
+    links.style.top = '64px';
+    links.style.left = '0';
+    links.style.right = '0';
+    links.style.background = 'rgba(10,10,10,0.98)';
+    links.style.padding = '24px';
+    links.style.gap = '20px';
+    links.style.zIndex = '999';
+  }
+}
+</script>
+</body>
+</html>
