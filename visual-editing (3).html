@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>시각편집 | SBS아카데미컴퓨터아트학원 분당지점</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --card-bg: #161616;
+      --border: #2a2a2a;
+      --white: #f5f5f0;
+      --muted: #888;
+      --accent: #e8003d;
+      --text: #e0e0d8;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(1.5rem, 5vw, 4rem); height: 64px;
+      background: rgba(10,10,10,0.95); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--white);
+      font-weight: 700; font-size: 0.85rem; letter-spacing: 0.03em;
+    }
+    .nav-logo img { height: 28px; filter: brightness(0) invert(1); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; letter-spacing: 0.05em; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-back { color: var(--muted); text-decoration: none; font-size: 0.82rem; letter-spacing: 0.05em; transition: color 0.2s; }
+    .nav-back:hover { color: var(--accent); }
+    @media (max-width: 768px) { .nav-links { display: none; } }
+
+    /* HERO */
+    .hero {
+      padding-top: 64px; min-height: 52vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 64px clamp(1.5rem, 8vw, 8rem) 4rem;
+      position: relative; overflow: hidden; border-bottom: 1px solid var(--border);
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 80% 30%, rgba(232,0,61,0.12) 0%, transparent 70%),
+                  radial-gradient(ellipse 40% 60% at 10% 70%, rgba(255,107,53,0.07) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-label {
+      font-size: 0.72rem; letter-spacing: 0.25em; color: var(--accent);
+      text-transform: uppercase; margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .hero-label::before { content: ''; display: block; width: 32px; height: 1px; background: var(--accent); }
+    .hero h1 {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: clamp(3.5rem, 10vw, 9rem);
+      font-weight: 900; line-height: 1.0; letter-spacing: -0.04em; color: var(--white);
+    }
+    .hero h1 em {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-style: normal; font-weight: 700;
+      color: var(--accent); font-size: 1em; letter-spacing: -0.04em;
+    }
+    .hero-sub { margin-top: 1.5rem; font-size: 0.9rem; color: var(--muted); max-width: 480px; }
+    .hero-meta { margin-top: 2rem; display: flex; gap: 2rem; font-size: 0.78rem; color: var(--muted); letter-spacing: 0.05em; flex-wrap: wrap; }
+    .hero-meta span { color: var(--white); font-weight: 500; }
+
+    /* FILTER */
+    .filter-bar {
+      padding: 2rem clamp(1.5rem, 8vw, 8rem);
+      display: flex; align-items: center; gap: 0.75rem;
+      border-bottom: 1px solid var(--border); flex-wrap: wrap;
+    }
+    .filter-label { font-size: 0.72rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; margin-right: 0.5rem; }
+    .filter-btn {
+      padding: 0.4rem 1.1rem; border: 1px solid var(--border);
+      background: transparent; color: var(--muted);
+      font-family: 'Noto Sans KR', sans-serif; font-size: 0.78rem;
+      cursor: pointer; border-radius: 2px; transition: all 0.2s; letter-spacing: 0.03em;
+    }
+    .filter-btn:hover, .filter-btn.active { background: var(--accent); border-color: var(--accent); color: var(--white); }
+
+    /* SECTION LABEL */
+    .section-label {
+      padding: 3rem clamp(1.5rem, 8vw, 8rem) 1rem;
+      font-size: 0.68rem; letter-spacing: 0.25em; color: var(--muted);
+      text-transform: uppercase; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* PORTFOLIO SECTION */
+    .portfolio-section { padding: 0 clamp(1.5rem, 8vw, 8rem); }
+
+    /* DESIGNER ROW */
+    .designer-row {
+      padding: 5rem 0 2rem;
+      display: grid; grid-template-columns: 1fr 2px 1fr;
+      gap: 0 3rem; align-items: start;
+      border-bottom: 1px solid var(--border); margin-bottom: 3rem;
+    }
+    .designer-divider { background: var(--border); height: 100%; min-height: 80px; }
+    .designer-number { font-family: 'Bebas Neue', sans-serif; font-size: 5rem; line-height: 1; color: var(--border); margin-bottom: 0.5rem; }
+    .designer-name { font-size: 1.6rem; font-weight: 700; color: var(--white); letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+    .designer-tag { display: inline-block; font-size: 0.68rem; letter-spacing: 0.2em; color: var(--accent); border: 1px solid var(--accent); padding: 0.2rem 0.6rem; border-radius: 1px; text-transform: uppercase; margin-bottom: 1rem; }
+    .designer-tools { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .tool-badge { font-size: 0.68rem; padding: 0.2rem 0.5rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 2px; color: var(--muted); }
+    .designer-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.8; margin-top: 1rem; }
+    .designer-stats { display: flex; gap: 2rem; margin-top: 1.5rem; }
+    .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--white); line-height: 1; }
+    .stat-label { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    @media (max-width: 768px) {
+      .designer-row { grid-template-columns: 1fr; }
+      .designer-divider { display: none; }
+    }
+
+    /* PROJECTS GRID */
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 6rem;
+    }
+    @media (max-width: 768px) { .projects-grid { grid-template-columns: 1fr; } }
+
+    /* PROJECT CARD */
+    .project-card {
+      background: var(--card-bg); padding: 2rem;
+      cursor: pointer; transition: background 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .project-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px; background: var(--accent);
+      transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease;
+    }
+    .project-card:hover { background: #1c1c1c; }
+    .project-card:hover::after { transform: scaleX(1); }
+    .project-card.featured { grid-column: span 2; }
+    @media (max-width: 768px) { .project-card.featured { grid-column: span 1; } }
+
+    .project-num { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; line-height: 1; color: var(--border); margin-bottom: 0.5rem; transition: color 0.2s; }
+    .project-card:hover .project-num { color: var(--accent); }
+    .project-type { font-size: 0.65rem; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 0.5rem; }
+    .project-title { font-size: 1.25rem; font-weight: 700; color: var(--white); margin-bottom: 0.4rem; letter-spacing: -0.01em; }
+    .project-title-en { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .project-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.75; margin-bottom: 1.5rem; }
+    .project-meta { display: flex; align-items: center; justify-content: space-between; padding-top: 1rem; border-top: 1px solid var(--border); }
+    .project-duration { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.05em; }
+    .project-arrow { font-size: 1rem; color: var(--muted); transition: color 0.2s, transform 0.2s; }
+    .project-card:hover .project-arrow { color: var(--accent); transform: translate(3px, -3px); }
+    .project-keywords { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.8rem; }
+    .kw { font-size: 0.65rem; padding: 0.15rem 0.45rem; border: 1px solid var(--border); border-radius: 1px; color: var(--muted); }
+    .project-highlight { display: inline-block; font-size: 0.65rem; letter-spacing: 0.15em; padding: 0.2rem 0.5rem; background: rgba(232,0,61,0.12); border: 1px solid rgba(232,0,61,0.3); color: var(--accent); border-radius: 1px; text-transform: uppercase; margin-bottom: 0.6rem; }
+
+    /* PDF 클릭 안내 배지 */
+    .pdf-badge {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.65rem; padding: 0.25rem 0.6rem;
+      background: rgba(232,0,61,0.08); border: 1px solid rgba(232,0,61,0.25);
+      color: var(--accent); border-radius: 2px; margin-top: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+    .pdf-badge svg { flex-shrink: 0; }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.92); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center; padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #111; border: 1px solid var(--border);
+      width: 100%; max-width: 960px; height: 90vh;
+      display: flex; flex-direction: column;
+      border-radius: 4px; overflow: hidden;
+      animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to   { opacity: 1; transform: none; }
+    }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .modal-title { font-size: 0.9rem; font-weight: 700; color: var(--white); }
+    .modal-sub { font-size: 0.72rem; color: var(--muted); margin-top: 0.1rem; }
+    .modal-actions { display: flex; align-items: center; gap: 0.75rem; }
+    .modal-btn {
+      padding: 0.45rem 1rem; border: 1px solid var(--border);
+      background: transparent; color: var(--muted);
+      font-family: 'Noto Sans KR', sans-serif; font-size: 0.75rem;
+      cursor: pointer; border-radius: 2px; transition: all 0.2s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 0.3rem;
+    }
+    .modal-btn:hover { border-color: var(--white); color: var(--white); }
+    .modal-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .modal-btn.primary:hover { background: #c0002f; }
+    .modal-close {
+      width: 36px; height: 36px; border: 1px solid var(--border);
+      background: transparent; color: var(--muted); cursor: pointer;
+      border-radius: 2px; font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .modal-close:hover { border-color: var(--accent); color: var(--accent); }
+    .modal-body { flex: 1; overflow: hidden; position: relative; }
+    .modal-body iframe {
+      width: 100%; height: 100%; border: none; display: block;
+    }
+    .modal-loading {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 1rem;
+      background: #111; color: var(--muted); font-size: 0.85rem;
+    }
+    .spinner {
+      width: 36px; height: 36px; border: 2px solid var(--border);
+      border-top-color: var(--accent); border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* HIDDEN */
+    .project-group.hidden { display: none; }
+    .section-block.hidden { display: none; }
+
+    /* FADE IN */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem clamp(1.5rem, 8vw, 8rem);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    }
+    footer p { font-size: 0.75rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+    .footer-links a { font-size: 0.75rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="https://miediapn.gensparkspace.com/images/sbs-logo.svg" alt="SBS아카데미" />
+    <span>SBS아카데미 분당지점</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#categories">작품</a></li>
+    <li><a href="notice.html">공지사항</a></li>
+    <li><a href="schedule.html">개강안내</a></li>
+    <li><a href="index.html#about">소개</a></li>
+    <li><a href="index.html#contact">문의</a></li>
+  </ul>
+  <a href="index.html#categories" class="nav-back">← 학과 목록</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-label">01 · Visual Editing</div>
+  <h1>시각<br/><em>편집</em><br/>디자인</h1>
+  <p class="hero-sub">브랜딩, 패키지, UI/UX 리디자인까지 — 시각적 언어로 이야기를 만드는 학생들의 작품입니다.</p>
+  <div class="hero-meta">
+    <div>학생 수 <span>3</span></div>
+    <div>총 작품 수 <span>13</span></div>
+    <div>기수 <span>4기 · 5기</span></div>
+  </div>
+</section>
+
+<!-- FILTER -->
+<div class="filter-bar">
+  <span class="filter-label">Filter</span>
+  <button class="filter-btn active" onclick="filterProjects('all', this)">전체</button>
+  <button class="filter-btn" onclick="filterProjects('uiux', this)">UI/UX 리디자인</button>
+  <button class="filter-btn" onclick="filterProjects('branding', this)">브랜딩·패키지</button>
+  <button class="filter-btn" onclick="filterProjects('poster', this)">포스터·편집</button>
+</div>
+
+<!-- ======================== DESIGNER 01 : 송승일 ======================== -->
+<div class="section-block" data-block="uiux">
+  <div class="section-label">Designer 01 / 03 — 송승일</div>
+  <div class="portfolio-section">
+    <div class="designer-row fade-in">
+      <div class="designer-info">
+        <div class="designer-number">01</div>
+        <div class="designer-tag">UI/UX Design</div>
+        <h2 class="designer-name">송승일</h2>
+        <p class="designer-desc">
+          사용자의 흐름을 관찰해 몰입을 방해하는 요소를 구조적으로 해석하며<br/>
+          감각적 디자인과 명확한 문제 정의가 좋은 경험을 만든다고 믿습니다.
+        </p>
+        <div class="designer-tools" style="margin-top:1rem;">
+          <span class="tool-badge">Figma</span><span class="tool-badge">HTML5</span>
+          <span class="tool-badge">CSS3</span><span class="tool-badge">JavaScript</span>
+          <span class="tool-badge">Photoshop</span><span class="tool-badge">Illustrator</span>
+          <span class="tool-badge">After Effects</span>
+        </div>
+        <div class="designer-stats">
+          <div class="stat"><div class="stat-num">5</div><div class="stat-label">Projects</div></div>
+          <div class="stat"><div class="stat-num">GTQ</div><div class="stat-label">자격증 1급</div></div>
+          <div class="stat"><div class="stat-num">2</div><div class="stat-label">Awards</div></div>
+        </div>
+      </div>
+      <div class="designer-divider"></div>
+      <div style="display:flex;flex-direction:column;justify-content:center;gap:0.5rem;">
+        <p style="font-size:0.72rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;">Contact</p>
+        <p style="font-size:0.85rem;color:var(--white);">kdl0303@naver.com</p>
+        <p style="font-size:0.8rem;color:var(--muted);margin-top:0.3rem;">blog.naver.com/kdl0303</p>
+        <p style="font-size:0.72rem;color:var(--muted);margin-top:1.5rem;line-height:1.8;">
+          수상 · 제3회 오뚜기 일러스트레이션 공모전 스위트홈상<br/>
+          수상 · 라우드소싱 프로틴 쉐이크 네이밍 우승
+        </p>
+      </div>
+    </div>
+
+    <div class="projects-grid project-group" data-category="uiux">
+      <div class="project-card featured fade-in" onclick="openPDF('portfolios/송승일_포트폴리오.pdf', 'ARTE MUSEUM 외 4개 프로젝트', '송승일 UI/UX 포트폴리오')">
+        <div class="project-highlight">Immersive Experience</div>
+        <div class="project-num">001</div>
+        <div class="project-type">UI/UX Redesign · Responsive Web</div>
+        <h3 class="project-title">ARTE MUSEUM</h3>
+        <p class="project-title-en">Immersive UI/UX redesign for an art experience platform</p>
+        <p class="project-desc">아르떼뮤지엄 PINK MOON 전시의 몰입형 감성을 웹에서 재현하지 못하는 문제를 해결한 리디자인 프로젝트. 다크 톤과 핑크 컬러 시스템으로 전시의 세계관을 구현했습니다.</p>
+        <div class="project-keywords">
+          <span class="kw">Dark UI</span><span class="kw">Immersive</span><span class="kw">Brand Experience</span>
+        </div>
+        <div class="pdf-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          클릭하여 포트폴리오 PDF 보기
+        </div>
+        <div class="project-meta">
+          <span class="project-duration">Duration: 5일 · 개인 프로젝트 (UI/UX 100%)</span>
+          <span class="project-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" onclick="openPDF('portfolios/송승일_포트폴리오.pdf', '한화리조트 App Design', '송승일 UI/UX 포트폴리오')">
+        <div class="project-num">002</div>
+        <div class="project-type">App Design · 반응형 웹</div>
+        <h3 class="project-title">한화리조트</h3>
+        <p class="project-title-en">Design the value of time — Hanwha Resort App Redesign</p>
+        <p class="project-desc">복잡한 예약 구조를 단순화하고 핵심 기능을 명확히 드러낸 앱 리디자인. 사용자가 더 적은 단계로 편안하게 여행을 계획할 수 있습니다.</p>
+        <div class="project-keywords"><span class="kw">UX Research</span><span class="kw">IA 재설계</span><span class="kw">Fewer Clicks</span></div>
+        <div class="pdf-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          클릭하여 포트폴리오 PDF 보기
+        </div>
+        <div class="project-meta">
+          <span class="project-duration">Duration: 7일 · 개인 프로젝트</span>
+          <span class="project-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" onclick="openPDF('portfolios/송승일_포트폴리오.pdf', '매일유업 Responsive Web', '송승일 UI/UX 포트폴리오')">
+        <div class="project-num">003</div>
+        <div class="project-type">UI/UX Redesign · Responsive Web</div>
+        <h3 class="project-title">매일유업</h3>
+        <p class="project-title-en">건강한 일상을 위한 브랜드 디지털 경험 개선</p>
+        <p class="project-desc">딱딱한 기업형 사이트를 '건강·신뢰·가족' 가치 중심으로 재해석. 경쟁사 포지셔닝 분석을 통해 친근하고 편안한 UX를 구현했습니다.</p>
+        <div class="project-keywords"><span class="kw">Positioning Map</span><span class="kw">Brand Story</span><span class="kw">Readability</span></div>
+        <div class="pdf-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          클릭하여 포트폴리오 PDF 보기
+        </div>
+        <div class="project-meta">
+          <span class="project-duration">Duration: 5일 · 개인 프로젝트</span>
+          <span class="project-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" onclick="openPDF('portfolios/송승일_포트폴리오.pdf', 'UPstage AI Responsive Web', '송승일 UI/UX 포트폴리오')">
+        <div class="project-num">004</div>
+        <div class="project-type">UI/UX Redesign · Responsive Web</div>
+        <h3 class="project-title">UPstage AI</h3>
+        <p class="project-title-en">UIUX redesign for an AI platform</p>
+        <p class="project-desc">Clarity · Credibility · Tech Identity 세 키워드 중심으로 다크 테크 톤과 퍼플 포인트의 일관된 비주얼 시스템을 구축했습니다.</p>
+        <div class="project-keywords"><span class="kw">Tech Identity</span><span class="kw">Dark UI</span><span class="kw">Montserrat</span></div>
+        <div class="pdf-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          클릭하여 포트폴리오 PDF 보기
+        </div>
+        <div class="project-meta">
+          <span class="project-duration">Duration: 7일 · 개인 프로젝트</span>
+          <span class="project-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" onclick="openPDF('portfolios/송승일_포트폴리오.pdf', 'MIKITA Responsive Web', '송승일 UI/UX 포트폴리오')">
+        <div class="project-num">005</div>
+        <div class="project-type">UI/UX Redesign · Responsive Web</div>
+        <h3 class="project-title">MIKITA</h3>
+        <p class="project-title-en">Minimal UI/UX Redesign for MYKITA — Engineered Minimalism from Berlin</p>
+        <p class="project-desc">"Precision shapes Minimalism" 컨셉으로 절제된 여백과 타이포그래피의 조화를 구현한 하이엔드 아이웨어 리디자인.</p>
+        <div class="project-keywords"><span class="kw">Editorial</span><span class="kw">Minimalism</span><span class="kw">팀 프로젝트</span></div>
+        <div class="pdf-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          클릭하여 포트폴리오 PDF 보기
+        </div>
+        <div class="project-meta">
+          <span class="project-duration">Duration: 10일 · 팀 프로젝트 (UI 75%)</span>
+          <span class="project-arrow">↗</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== DESIGNER 02 : 정주리 ======================== -->
+<div class="section-block" data-block="branding">
+  <div class="section-label">Designer 02 / 03 — 정주리</div>
+  <div class="portfolio-section">
+    <div class="designer-row fade-in">
+      <div class="designer-info">
+        <div class="designer-number">02</div>
+        <div class="designer-tag">Branding · Package Design</div>
+        <h2 class="designer-name">정주리</h2>
+        <p class="designer-desc">로컬 특산물에서 글로벌 제품까지, 브랜드의 철학을 패키지와 아이덴티티로 번역합니다. 시장 조사와 사용자 인사이트를 기반으로 차별화된 브랜드 경험을 설계합니다.</p>
+        <div class="designer-tools" style="margin-top:1rem;">
+          <span class="tool-badge">Illustrator</span><span class="tool-badge">Photoshop</span><span class="tool-badge">Figma</span>
+        </div>
+        <div class="designer-stats">
+          <div class="stat"><div class="stat-num">5</div><div class="stat-label">Projects</div></div>
+          <div class="stat"><div class="stat-num">2</div><div class="stat-label">Branding</div></div>
+          <div class="stat"><div class="stat-num">1</div><div class="stat-label">Product</div></div>
+        </div>
+      </div>
+      <div class="designer-divider"></div>
+      <div style="display:flex;flex-direction:column;justify-content:center;gap:0.5rem;">
+        <p style="font-size:0.72rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;">Contact</p>
+        <p style="font-size:0.85rem;color:var(--white);">dodo1262@naver.com</p>
+        <p style="font-size:0.75rem;color:var(--muted);margin-top:1.5rem;line-height:1.8;">
+          브랜딩·패키지 · 다감 (茶感) — 창원 단감 로컬 티 브랜드<br/>
+          브랜딩·패키지 · 해브넛 (HaVENUT) — 건강 베이커리<br/>
+          제품 브랜딩 · 세이프 클립 (SAFECLIP) — 공존형 웨어러블<br/>
+          공익광고 포스터 · 아동학대 인식 개선<br/>
+          카드뉴스 · 과일·채소 순우리말 단어장
+        </p>
+      </div>
+    </div>
+
+    <div class="projects-grid project-group" data-category="branding">
+      <div class="project-card featured fade-in" onclick="openPDF('portfolios/정주리_포폴.pdf', '다감 (茶感) — Local Branding', '정주리 브랜딩 포트폴리오')">
+        <div class="project-highlight">Local Branding</div>
+        <div class="project-num">001</div>
+        <div class="project-type">Branding · Package Design</div>
+        <h3 class="project-title">다감 (茶感)</h3>
+        <p class="project-title-en">창원 단감 로컬 티 브랜드</p>
+        <p class="project-desc">창원의 제철 단감을 차(茶)로 재해석한 로컬 브랜드. 기하학적 심볼과 캘리그라피의 대비로 전통과 현대를 잇는 아이덴티티를 완성했습니다.</p>
+        <div class="project-keywords"><span class="kw">Local Branding</span><span class="kw">Tea Packaging</span><span class="kw">Seasonal Blend</span><span class="kw">2030 타겟</span></div>
+        <div class="pdf-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          클릭하여 포트폴리오 PDF 보기
+        </div>
+        <div class="project-meta">
+          <span class="project-duration">개인 프로젝트 · Ai · Ps</span>
+          <span class="project-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" onclick="openPDF('portfolios/정주리_포폴.pdf', '해브넛 (HaVENUT)', '정주리 브랜딩 포트폴리오')">
+        <div class="project-num">002</div>
+        <div class="project-type">Branding · Package Design</div>
+        <h3 class="project-title">해브넛 (HaVENUT)</h3>
+        <p class="project-title-en">New Harvest Baguette — 건강 베이커리 브랜딩</p>
+        <p class="project-desc">헬시플레저·저속노화 트렌드에 맞춘 햇곡물 견과류 바게트 전문점. 핸드드로잉 로고와 내추럴 뉴트럴 톤으로 "믿을 수 있는 한 끼"의 가치를 전달합니다.</p>
+        <div class="project-keywords"><span class="kw">Healthy Pleasure</span><span class="kw">Hand Drawing</span><span class="kw">Natural</span></div>
+        <div class="pdf-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          클릭하여 포트폴리오 PDF 보기
+        </div>
+        <div class="project-meta">
+          <span class="project-duration">개인 프로젝트 · Ai · Ps</span>
+          <span class="project-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" onclick="openPDF('portfolios/정주리_포폴.pdf', '세이프 클립 (SAFECLIP)', '정주리 브랜딩 포트폴리오')">
+        <div class="project-num">003</div>
+        <div class="project-type">Product Branding</div>
+        <h3 class="project-title">세이프 클립 (SAFECLIP)</h3>
+        <p class="project-title-en">공존형 웨어러블 제품 브랜딩</p>
+        <p class="project-desc">관광지 원숭이 공격 예방을 위한 모자 부착형 유칼립투스 허브 클립. 인간과 자연의 공존 철학을 담은 비폭력적 안전 솔루션입니다.</p>
+        <div class="project-keywords"><span class="kw">Product Branding</span><span class="kw">Coexistence</span><span class="kw">팀 프로젝트</span></div>
+        <div class="pdf-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          클릭하여 포트폴리오 PDF 보기
+        </div>
+        <div class="project-meta">
+          <span class="project-duration">팀 프로젝트 · Ai · Ps · Fi</span>
+          <span class="project-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" onclick="openPDF('portfolios/정주리_포폴.pdf', '아동학대 공익광고 포스터', '정주리 브랜딩 포트폴리오')">
+        <div class="project-num">004</div>
+        <div class="project-type">Public Service Poster</div>
+        <h3 class="project-title">아동학대</h3>
+        <p class="project-title-en">찢어져야만 보이시나요? — 공익광고 포스터</p>
+        <p class="project-desc">낮은 신고율과 사회적 경각심 부족 문제를 강렬한 시각 언어로 전달. 아동학대는 가정사가 아닌 사회적 범죄라는 메시지를 담았습니다.</p>
+        <div class="project-keywords"><span class="kw">Public Service</span><span class="kw">Poster</span><span class="kw">Social Issue</span></div>
+        <div class="pdf-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          클릭하여 포트폴리오 PDF 보기
+        </div>
+        <div class="project-meta">
+          <span class="project-duration">개인 프로젝트 · Ai · Ps</span>
+          <span class="project-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" onclick="openPDF('portfolios/정주리_포폴.pdf', '과일·채소 단어장 카드뉴스', '정주리 브랜딩 포트폴리오')">
+        <div class="project-num">005</div>
+        <div class="project-type">Card News · Editorial Design</div>
+        <h3 class="project-title">과일·채소 단어장</h3>
+        <p class="project-title-en">야채와 과일 속 숨겨진 의미 — Pure Korean Card News</p>
+        <p class="project-desc">친숙한 채소·과일 이름 뒤에 감춰진 순우리말의 언어적 의미를 발견하는 SNS 콘텐츠. 노트장 형태의 디자인으로 흥미를 유발합니다.</p>
+        <div class="project-keywords"><span class="kw">Card News</span><span class="kw">SNS Content</span><span class="kw">Illustration</span></div>
+        <div class="pdf-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          클릭하여 포트폴리오 PDF 보기
+        </div>
+        <div class="project-meta">
+          <span class="project-duration">개인 프로젝트 · Ai · Ps</span>
+          <span class="project-arrow">↗</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== DESIGNER 03 : 이소미 ======================== -->
+<div class="section-block" data-block="poster">
+  <div class="section-label">Designer 03 / 03 — 이소미</div>
+  <div class="portfolio-section">
+    <div class="designer-row fade-in">
+      <div class="designer-info">
+        <div class="designer-number">03</div>
+        <div class="designer-tag">Editing · Visual Design</div>
+        <h2 class="designer-name">이소미</h2>
+        <p class="designer-desc">4기 수료생으로, 편집 디자인의 구성력과 시각적 완성도를 갖춘 작품을 선보입니다.</p>
+        <div class="designer-tools" style="margin-top:1rem;">
+          <span class="tool-badge">Illustrator</span><span class="tool-badge">Photoshop</span><span class="tool-badge">InDesign</span>
+        </div>
+        <div class="designer-stats">
+          <div class="stat"><div class="stat-num">4기</div><div class="stat-label">수료</div></div>
+          <div class="stat"><div class="stat-num">편집</div><div class="stat-label">전문 분야</div></div>
+        </div>
+      </div>
+      <div class="designer-divider"></div>
+      <div style="display:flex;flex-direction:column;justify-content:center;gap:0.5rem;">
+        <p style="font-size:0.72rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;">4기 수료 · 편집 포트폴리오</p>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.8;margin-top:0.5rem;">
+          2022년 4기 수료 · 시각편집디자인 과정<br/>
+          SBS아카데미컴퓨터아트학원 분당지점
+        </p>
+      </div>
+    </div>
+
+    <div class="projects-grid project-group" data-category="poster">
+      <div class="project-card featured fade-in" onclick="openPDF('portfolios/2022_4기수_편집포폴_이소미.pdf', '이소미 편집 포트폴리오', '2022 4기 수료 — Visual Editing Portfolio')">
+        <div class="project-highlight">4기 수료 작품</div>
+        <div class="project-num">001</div>
+        <div class="project-type">편집 디자인 포트폴리오</div>
+        <h3 class="project-title">이소미 편집 포트폴리오</h3>
+        <p class="project-title-en">2022 4기 수료 — Visual Editing Portfolio</p>
+        <p class="project-desc">시각편집디자인 과정을 수료하며 완성한 편집 작품 포트폴리오. 인쇄 매체와 디지털 편집을 아우르는 구성력과 타이포그래피 감각을 선보입니다.</p>
+        <div class="project-keywords"><span class="kw">편집 디자인</span><span class="kw">Typography</span><span class="kw">Layout</span></div>
+        <div class="pdf-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          클릭하여 포트폴리오 PDF 보기
+        </div>
+        <div class="project-meta">
+          <span class="project-duration">2022 · 4기 수료</span>
+          <span class="project-arrow">↗</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 SBS아카데미컴퓨터아트학원 분당지점. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="index.html">홈으로</a></li>
+    <li><a href="index.html#categories">학과 목록</a></li>
+    <li><a href="notice.html">공지사항</a></li>
+    <li><a href="index.html#contact">문의</a></li>
+  </ul>
+</footer>
+
+<!-- PDF MODAL -->
+<div class="modal-overlay" id="pdfModal" onclick="handleOverlayClick(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle"></div>
+        <div class="modal-sub" id="modalSub"></div>
+      </div>
+      <div class="modal-actions">
+        <a class="modal-btn primary" id="modalDownload" href="#" download target="_blank">
+          ↓ 다운로드
+        </a>
+        <a class="modal-btn" id="modalNewTab" href="#" target="_blank">
+          새 탭에서 보기 ↗
+        </a>
+        <button class="modal-close" onclick="closePDF()">✕</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-loading" id="modalLoading">
+        <div class="spinner"></div>
+        <span>PDF를 불러오는 중...</span>
+      </div>
+      <iframe id="pdfFrame" src="" onload="hideLoading()"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+  // PDF Modal
+  function openPDF(path, title, sub) {
+    const modal = document.getElementById('pdfModal');
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalSub').textContent = sub;
+    document.getElementById('modalDownload').href = path;
+    document.getElementById('modalNewTab').href = path;
+    document.getElementById('modalLoading').style.display = 'flex';
+    document.getElementById('pdfFrame').src = '';
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    // 살짝 딜레이 후 로드 (로딩 애니메이션 표시)
+    setTimeout(() => {
+      document.getElementById('pdfFrame').src = path;
+    }, 100);
+  }
+
+  function hideLoading() {
+    document.getElementById('modalLoading').style.display = 'none';
+  }
+
+  function closePDF() {
+    document.getElementById('pdfModal').classList.remove('open');
+    document.getElementById('pdfFrame').src = '';
+    document.body.style.overflow = '';
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('pdfModal')) closePDF();
+  }
+
+  // ESC 키로 닫기
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePDF(); });
+
+  // Filter
+  function filterProjects(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    if (cat === 'all') {
+      document.querySelectorAll('.section-block').forEach(b => b.classList.remove('hidden'));
+      return;
+    }
+
+    document.querySelectorAll('.section-block').forEach(block => {
+      const blockCat = block.getAttribute('data-block');
+      // uiux 블록은 송승일(uiux), branding은 정주리(branding+poster 포함), poster는 이소미
+      if (cat === 'uiux' && blockCat === 'uiux') block.classList.remove('hidden');
+      else if (cat === 'branding' && blockCat === 'branding') block.classList.remove('hidden');
+      else if (cat === 'poster' && (blockCat === 'poster' || blockCat === 'branding')) block.classList.remove('hidden');
+      else block.classList.add('hidden');
+    });
+  }
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.06 });
+
+  document.querySelectorAll('.fade-in').forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 4) * 0.08}s`;
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
